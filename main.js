@@ -279,12 +279,6 @@ const editorConfig = {
 				attributes: true,
 				classes: true
 			},
-			{
-                name: 'script',
-                attributes: true,
-                classes: true,
-                styles: true
-            }
 		]
 	},
 	image: {
@@ -339,7 +333,6 @@ const editorConfig = {
 		contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
 	}
 };
-
 let editorInstance;
 let previewWindow = null; // Biến để lưu tham chiếu đến cửa sổ preview
 let isPreviewMode = false; // Biến để theo dõi trạng thái của nút toggle
@@ -364,40 +357,46 @@ ClassicEditor.create(document.querySelector('#editor'), editorConfig)
 function openOrUpdatePreviewWindow() {
 	if (editorInstance) {
 		const editorContent = editorInstance.getData();
+		console.log(editorContent);
 		
-		if (!previewWindow || previewWindow.closed) {
-			// Mở cửa sổ mới nếu chưa có
-			previewWindow = window.open('', '_blank');
+		if (previewWindow && !previewWindow.closed) {
+			// Nếu cửa sổ đã mở, đóng nó trước khi mở lại
+			previewWindow.close();
+		}
+		
+		// Mở cửa sổ mới
+		previewWindow = window.open('', '_blank');
 
-			if (previewWindow) {
-				previewWindow.document.open();
-				previewWindow.document.write(`
-					<!DOCTYPE html>
-					<html lang="en">
-					<head>
-						<meta charset="UTF-8">
-						<meta name="viewport" content="width=device-width, initial-scale=1.0">
-						<title>Preview</title>
-					</head>
-					<body>
-						${editorContent}
-					</body>
-					</html>
-				`);
-				previewWindow.document.close();
-			}
-		} else {
-			// Cập nhật nội dung nếu cửa sổ đã mở
-			updatePreviewInWindow();
+		if (previewWindow) {
+			writeContentToPreviewWindow(previewWindow, editorContent);
 		}
 	}
+}
+
+// Hàm ghi nội dung vào cửa sổ preview
+function writeContentToPreviewWindow(window, content) {
+	window.document.open();
+	window.document.write(`
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Preview</title>
+		</head>
+		<body>
+			${content}
+		</body>
+		</html>
+	`);
+	window.document.close();
 }
 
 // Hàm cập nhật nội dung trong cửa sổ preview
 function updatePreviewInWindow() {
 	if (previewWindow) {
 		const editorContent = editorInstance.getData();
-		previewWindow.document.body.innerHTML = editorContent;
+		writeContentToPreviewWindow(previewWindow, editorContent);
 	}
 }
 
@@ -406,8 +405,8 @@ document.getElementById('previewBtn').onclick = function() {
 	const button = document.getElementById('previewBtn');
 
 	if (isPreviewMode && previewWindow && !previewWindow.closed) {
-		// Nếu đang ở chế độ xem trước và cửa sổ còn mở, cập nhật nội dung trong cửa sổ đã mở
-		updatePreviewInWindow();
+		// Nếu đang ở chế độ xem trước và cửa sổ còn mở, làm mới nội dung
+		openOrUpdatePreviewWindow();
 		button.textContent = 'Update Preview'; // Đảm bảo là 'Update Preview'
 	} else {
 		// Nếu không phải chế độ xem trước, mở cửa sổ mới hoặc cập nhật cửa sổ hiện có
