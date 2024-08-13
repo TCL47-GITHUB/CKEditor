@@ -278,7 +278,13 @@ const editorConfig = {
 				styles: true,
 				attributes: true,
 				classes: true
-			}
+			},
+			{
+                name: 'script',
+                attributes: true,
+                classes: true,
+                styles: true
+            }
 		]
 	},
 	image: {
@@ -294,7 +300,7 @@ const editorConfig = {
 		]
 	},
 	initialData:
-		'<h2>Congratulations on setting up CKEditor 5! 🎉</h2>\n<p>\n    You\'ve successfully created a CKEditor 5 project. This powerful text editor will enhance your application, enabling rich text editing\n    capabilities that are customizable and easy to use.\n</p>\n<h3>What\'s next?</h3>\n<ol>\n    <li>\n        <strong>Integrate into your app</strong>: time to bring the editing into your application. Take the code you created and add to your\n        application.\n    </li>\n    <li>\n        <strong>Explore features:</strong> Experiment with different plugins and toolbar options to discover what works best for your needs.\n    </li>\n    <li>\n        <strong>Customize your editor:</strong> Tailor the editor\'s configuration to match your application\'s style and requirements. Or even\n        write your plugin!\n    </li>\n</ol>\n<p>\n    Keep experimenting, and don\'t hesitate to push the boundaries of what you can achieve with CKEditor 5. Your feedback is invaluable to us\n    as we strive to improve and evolve. Happy editing!\n</p>\n<h3>Helpful resources</h3>\n<ul>\n    <li>📝 <a href="https://orders.ckeditor.com/trial/premium-features">Trial sign up</a>,</li>\n    <li>📕 <a href="https://ckeditor.com/docs/ckeditor5/latest/installation/index.html">Documentation</a>,</li>\n    <li>⭐️ <a href="https://github.com/ckeditor/ckeditor5">GitHub</a> (star us if you can!),</li>\n    <li>🏠 <a href="https://ckeditor.com">CKEditor Homepage</a>,</li>\n    <li>🧑‍💻 <a href="https://ckeditor.com/ckeditor-5/demo/">CKEditor 5 Demos</a>,</li>\n</ul>\n<h3>Need help?</h3>\n<p>\n    See this text, but the editor is not starting up? Check the browser\'s console for clues and guidance. It may be related to an incorrect\n    license key if you use premium features or another feature-related requirement. If you cannot make it work, file a GitHub issue, and we\n    will help as soon as possible!\n</p>\n',
+		'<h2>Trương Công Lý CKEditor 5! 🎉</h2>',
 	link: {
 		addTargetToExternalLinks: true,
 		defaultProtocol: 'https://',
@@ -334,4 +340,81 @@ const editorConfig = {
 	}
 };
 
-ClassicEditor.create(document.querySelector('#editor'), editorConfig);
+let editorInstance;
+let previewWindow = null; // Biến để lưu tham chiếu đến cửa sổ preview
+let isPreviewMode = false; // Biến để theo dõi trạng thái của nút toggle
+
+// Khởi tạo CKEditor 5 với cấu hình tùy chỉnh (editorConfig nếu có)
+ClassicEditor.create(document.querySelector('#editor'), editorConfig)
+	.then(editor => {
+		editorInstance = editor;
+
+		// Lắng nghe sự thay đổi nội dung và cập nhật preview
+		editor.model.document.on('change:data', () => {
+			if (isPreviewMode && previewWindow && !previewWindow.closed) {
+				updatePreviewInWindow();
+			}
+		});
+	})
+	.catch(error => {
+		console.error(error);
+	});
+
+// Hàm mở nội dung trong một cửa sổ mới hoặc cập nhật nếu đã mở
+function openOrUpdatePreviewWindow() {
+	if (editorInstance) {
+		const editorContent = editorInstance.getData();
+		
+		if (!previewWindow || previewWindow.closed) {
+			// Mở cửa sổ mới nếu chưa có
+			previewWindow = window.open('', '_blank');
+
+			if (previewWindow) {
+				previewWindow.document.open();
+				previewWindow.document.write(`
+					<!DOCTYPE html>
+					<html lang="en">
+					<head>
+						<meta charset="UTF-8">
+						<meta name="viewport" content="width=device-width, initial-scale=1.0">
+						<title>Preview</title>
+					</head>
+					<body>
+						${editorContent}
+					</body>
+					</html>
+				`);
+				previewWindow.document.close();
+			}
+		} else {
+			// Cập nhật nội dung nếu cửa sổ đã mở
+			updatePreviewInWindow();
+		}
+	}
+}
+
+// Hàm cập nhật nội dung trong cửa sổ preview
+function updatePreviewInWindow() {
+	if (previewWindow) {
+		const editorContent = editorInstance.getData();
+		previewWindow.document.body.innerHTML = editorContent;
+	}
+}
+
+// Xử lý sự kiện khi nhấn nút Preview
+document.getElementById('previewBtn').onclick = function() {
+	const button = document.getElementById('previewBtn');
+
+	if (isPreviewMode && previewWindow && !previewWindow.closed) {
+		// Nếu đang ở chế độ xem trước và cửa sổ còn mở, cập nhật nội dung trong cửa sổ đã mở
+		updatePreviewInWindow();
+		button.textContent = 'Update Preview'; // Đảm bảo là 'Update Preview'
+	} else {
+		// Nếu không phải chế độ xem trước, mở cửa sổ mới hoặc cập nhật cửa sổ hiện có
+		openOrUpdatePreviewWindow();
+		button.textContent = 'Update Preview'; // Đảm bảo là 'Update Preview'
+	}
+
+	// Cập nhật trạng thái toggle
+	isPreviewMode = !isPreviewMode;
+};
