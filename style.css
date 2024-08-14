@@ -38,7 +38,3 @@
 	height:auto;
 	display: none; /* Ẩn phần preview khi bắt đầu */
 }
-
-.editor-container_include-block-toolbar {
-	margin-left: 42px;
-}

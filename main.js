@@ -44,9 +44,7 @@ import {
 	ListProperties,
 	Markdown,
 	MediaEmbed,
-	Mention,
 	Paragraph,
-	PasteFromMarkdownExperimental,
 	PasteFromOffice,
 	RemoveFormat,
 	SelectAll,
@@ -124,7 +122,7 @@ const editorConfig = {
 			'|',
 			'accessibilityHelp'
 		],
-		shouldNotGroupWhenFull: false
+		shouldNotGroupWhenFull: true
 	},
 	plugins: [
 		AccessibilityHelp,
@@ -171,9 +169,7 @@ const editorConfig = {
 		ListProperties,
 		Markdown,
 		MediaEmbed,
-		Mention,
 		Paragraph,
-		PasteFromMarkdownExperimental,
 		PasteFromOffice,
 		RemoveFormat,
 		SelectAll,
@@ -271,15 +267,19 @@ const editorConfig = {
 			}
 		]
 	},
+	htmlEmbed: {
+		showPreviews: true,
+	},
 	htmlSupport: {
 		allow: [
+			// Enables all HTML features.
 			{
-				name: /^.*$/,
-				styles: true,
+				name: /.*/,
 				attributes: true,
-				classes: true
+				classes: true,
+				styles: true,
 			},
-		]
+		],
 	},
 	image: {
 		toolbar: [
@@ -314,16 +314,6 @@ const editorConfig = {
 			startIndex: true,
 			reversed: true
 		}
-	},
-	mention: {
-		feeds: [
-			{
-				marker: '@',
-				feed: [
-					/* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
-				]
-			}
-		]
 	},
 	menuBar: {
 		isVisible: true
@@ -384,7 +374,7 @@ function writeContentToPreviewWindow(window, content) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<title>Preview</title>
 		</head>
-		<body>
+		<body style=" max-width: 1000px; padding: 1.5rem; margin: 1rem auto; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; >
 			${content}
 		</body>
 		</html>
