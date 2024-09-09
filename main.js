@@ -197,6 +197,7 @@ const editorConfig = {
 		Underline,
 		Undo
 	],
+	allowedContent: true,
 	balloonToolbar: ['bold', 'italic', '|', 'link', 'insertImage', '|', 'bulletedList', 'numberedList'],
 	blockToolbar: [
 		'fontSize',
@@ -293,11 +294,13 @@ const editorConfig = {
 			'resizeImage'
 		]
 	},
+
 	initialData:
 		'<h2>Trương Công Lý CKEditor 5! 🎉</h2>',
 	link: {
 		addTargetToExternalLinks: true,
 		defaultProtocol: 'https://',
+		allowedProtocols: [ 'https?', 'tel', 'sms', 'sftp', 'smb', 'slack' ],
 		decorators: {
 			toggleDownloadable: {
 				mode: 'manual',
@@ -308,6 +311,7 @@ const editorConfig = {
 			}
 		}
 	},
+	linkTarget: true,
 	list: {
 		properties: {
 			styles: true,
