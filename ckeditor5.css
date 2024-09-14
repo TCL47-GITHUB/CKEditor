@@ -2212,6 +2212,13 @@ a.ck.ck-button-bold {
   background: var(--ck-color-base-background);
   border-radius: 0;
 }
+body{
+  overflow: hidden;
+}
+.ck.ck-editor__main {
+  overflow: scroll;
+  height: 90vh;
+}
 .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
 .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
   border-radius: var(--ck-border-radius);
