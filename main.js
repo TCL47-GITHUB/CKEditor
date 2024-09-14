@@ -295,8 +295,8 @@ const editorConfig = {
 		]
 	},
 
-	initialData:
-		'<h2>Trương Công Lý CKEditor 5! 🎉</h2>',
+	// initialData:
+	// 	'<h2>Trương Công Lý CKEditor 5! 🎉</h2>',
 	link: {
 		addTargetToExternalLinks: true,
 		defaultProtocol: 'https://',
