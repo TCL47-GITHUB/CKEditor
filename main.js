@@ -73,6 +73,9 @@ import {
 	Undo
 } from 'ckeditor5';
 
+// Lấy nội dung từ localStorage nếu có
+const savedContent = localStorage.getItem('editorContent') || '<p>CKEditor truongcognly.com</p>';
+
 const editorConfig = {
 	toolbar: {
 		items: [
@@ -295,8 +298,7 @@ const editorConfig = {
 		]
 	},
 
-	// initialData:
-	// 	'<h2>Trương Công Lý CKEditor 5! 🎉</h2>',
+	initialData: savedContent, 
 	link: {
 		addTargetToExternalLinks: true,
 		defaultProtocol: 'https://',
@@ -338,6 +340,8 @@ ClassicEditor.create(document.querySelector('#editor'), editorConfig)
 
 		// Lắng nghe sự thay đổi nội dung và cập nhật preview
 		editor.model.document.on('change:data', () => {
+			const editorContent = editorInstance.getData();
+                localStorage.setItem('editorContent', editorContent); // Lưu vào localStorage
 			if (isPreviewMode && previewWindow && !previewWindow.closed) {
 				updatePreviewInWindow();
 			}
