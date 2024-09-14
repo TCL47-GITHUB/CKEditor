@@ -351,18 +351,41 @@ ClassicEditor.create(document.querySelector('#editor'), editorConfig)
 function openOrUpdatePreviewWindow() {
 	if (editorInstance) {
 		const editorContent = editorInstance.getData();
-		console.log(editorContent);
+		localStorage.setItem('editorContent', editorContent); // Lưu nội dung vào localStorage
 		
-		if (previewWindow && !previewWindow.closed) {
-			// Nếu cửa sổ đã mở, đóng nó trước khi mở lại
-			previewWindow.close();
-		}
-		
-		// Mở cửa sổ mới
-		previewWindow = window.open('', '_blank');
-
-		if (previewWindow) {
-			writeContentToPreviewWindow(previewWindow, editorContent);
+		if (!previewWindow || previewWindow.closed) {
+			// Mở cửa sổ mới nếu chưa có
+			previewWindow = window.open('', '_blank');
+			if (previewWindow) {
+				previewWindow.document.open();
+				previewWindow.document.write(`
+					<!DOCTYPE html>
+					<html lang="en">
+					<head>
+						<meta charset="UTF-8">
+						<meta name="viewport" content="width=device-width, initial-scale=1.0">
+						<title>Preview</title>
+					</head>
+					<body>
+						<script>
+							// Lấy nội dung từ localStorage và hiển thị
+							document.body.innerHTML = localStorage.getItem('editorContent') || 'No content available.';
+							
+							// Xử lý việc làm mới nội dung
+							window.addEventListener('storage', function(event) {
+								if (event.key === 'editorContent') {
+									document.body.innerHTML = event.newValue || 'No content available.';
+								}
+							});
+						</script>
+					</body>
+					</html>
+				`);
+				previewWindow.document.close();
+			}
+		} else {
+			// Cập nhật nội dung nếu cửa sổ đã mở
+			updatePreviewInWindow();
 		}
 	}
 }
@@ -386,11 +409,12 @@ function writeContentToPreviewWindow(window, content) {
 	window.document.close();
 }
 
-// Hàm cập nhật nội dung trong cửa sổ preview
-function updatePreviewInWindow() {
+  // Hàm cập nhật nội dung trong cửa sổ preview
+  function updatePreviewInWindow() {
 	if (previewWindow) {
 		const editorContent = editorInstance.getData();
-		writeContentToPreviewWindow(previewWindow, editorContent);
+		localStorage.setItem('editorContent', editorContent); // Cập nhật nội dung trong localStorage
+		previewWindow.document.body.innerHTML = editorContent;
 	}
 }
 
