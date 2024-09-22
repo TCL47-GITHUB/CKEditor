@@ -20,25 +20,25 @@
 	word-break: break-word;
 }
 
-.editor-container_classic-editor .editor-container__editor {
+/* .editor-container_classic-editor .editor-container__editor {
 	min-width: 795px;
 	max-width: 1000px;
 	position: relative;
-}
+} */
 #previewBtn{
 	position: absolute;
 	top: 7px;
     right: 10px;
 }
 
-#previewContent {
+/* #previewContent {
 	border: 1px solid #000;
 	padding: 10px;
 	margin-top: 10px;
 	min-height: 200px;
 	height:auto;
-	display: none; /* Ẩn phần preview khi bắt đầu */
-}
+	display: none; 
+} */
 
 #installBtn {
 	position: fixed;
