@@ -369,6 +369,7 @@ function openOrUpdatePreviewWindow() {
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1.0">
 						<title>Preview</title>
+						<link rel="stylesheet" href="https://tcl47-github.github.io/CKEditor/style-preview.css"/>
 					</head>
 					<body>
 						<script>
@@ -396,21 +397,22 @@ function openOrUpdatePreviewWindow() {
 
 // Hàm ghi nội dung vào cửa sổ preview
 function writeContentToPreviewWindow(window, content) {
-	window.document.open();
-	window.document.write(`
-		<!DOCTYPE html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>Preview</title>
-		</head>
-		<body style=" max-width: 1000px; padding: 1.5rem; margin: 1rem auto; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; >
-			${content}
-		</body>
-		</html>
-	`);
-	window.document.close();
+    window.document.open();
+    window.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Preview</title>
+            <link rel="stylesheet" href="https://tcl47-github.github.io/CKEditor/content.css"/>
+        </head>
+        <body style="max-width: 1000px; padding: 1.5rem; margin: 1rem auto; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            ${content}
+        </body>
+        </html>
+    `);
+    window.document.close();
 }
 
   // Hàm cập nhật nội dung trong cửa sổ preview
