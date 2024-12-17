@@ -101,6 +101,28 @@ table th {
   font-weight: bold;
 }
 
+.table {
+  display: table;
+  margin: 0.9em auto;
+}
+.table table {
+  border: 1px double #b3b3b3;
+  border-collapse: collapse;
+  border-spacing: 0;
+  height: 100%;
+  width: 100%;
+}
+.table table td,
+.table table th {
+  border: 1px solid #bfbfbf;
+  min-width: 2em;
+  padding: 0.4em;
+}
+.table table th {
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: 700;
+}
+
 /* Code block */
 pre {
   background: #f4f4f4;
