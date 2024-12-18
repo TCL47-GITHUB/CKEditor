@@ -370,6 +370,8 @@ function openOrUpdatePreviewWindow() {
 						<meta name="viewport" content="width=device-width, initial-scale=1.0">
 						<title>Preview</title>
 						<link rel="stylesheet" href="https://tcl47-github.github.io/CKEditor/style-preview.css"/>
+						<link href='https://cdn.jsdelivr.net' rel='preconnect'/>
+						<link crossorigin='anonymous' href='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-okaidia.min.css' rel='stylesheet'/>
 					</head>
 					<body>
 						<script>
@@ -383,6 +385,10 @@ function openOrUpdatePreviewWindow() {
 								}
 							});
 						</script>
+						          <!-- prismjs highlight code -->
+  <script src='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js'>
+  </script>
+  <script src='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js'></script>
 					</body>
 					</html>
 				`);
