@@ -1,4 +1,4 @@
-    // FIX: Replaced shorthand import with the full list of modules to prevent syntax errors.
+// FIX: Replaced shorthand import with the full list of modules to prevent syntax errors.
       import {
         ClassicEditor,
         AccessibilityHelp,
@@ -204,7 +204,8 @@
             updatePreviewInWindow();
         });
 
-        // Hàm ghi nội dung đầy đủ vào cửa sổ xem trước
+        // FIX: This function now injects the raw content from the textareas,
+        // allowing the user to write full <style> and <script> tags.
         function writeToPreview(windowInstance) {
             if (!windowInstance || !editorInstance) return;
             const content = editorInstance.getData();
@@ -219,23 +220,15 @@
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Xem trước Nội dung</title>
-                <style>
+                <!--<style>
                   body { font-family: Inter, sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 2rem; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
                   img { max-width: 100%; height: auto; }
-                </style>
-                <style id="custom-style">${css}</style>
+                </style>-->
+                ${css}
               </head>
               <body>
                 <div id="content-wrapper">${content}</div>
-                <script id="custom-script">
-                  document.addEventListener('DOMContentLoaded', function() {
-                    try {
-                      ${js}
-                    } catch (e) {
-                      console.error("Error in custom JavaScript:", e);
-                    }
-                  });
-                <\/script>
+                ${js}
               </body>
               </html>
             `);
