@@ -172,6 +172,78 @@
         }
       }
     </script>
+
+<script>
+  const devPassword = "123456@"; // Thay bằng mật khẩu của bạn
+  const DEV_ACCESS_KEY = "dev_access_time";
+  const MAX_ACCESS_TIME = 3 * 60 * 60 * 1000; // 3 giờ
+
+  function isDevAccessGranted() {
+    const savedTime = localStorage.getItem(DEV_ACCESS_KEY);
+    if (!savedTime) return false;
+    const now = Date.now();
+    return now - parseInt(savedTime, 10) < MAX_ACCESS_TIME;
+  }
+
+  function grantDevAccess() {
+    localStorage.setItem(DEV_ACCESS_KEY, Date.now().toString());
+    alert("Mật khẩu đúng! Bạn có thể mở DevTools.");
+  }
+
+  function askForPassword() {
+    const input = prompt("...");
+    if (input === devPassword) {
+      grantDevAccess();
+    } else {
+      alert("...!");
+      window.location.href = "#";
+    }
+  }
+
+  window.addEventListener("keydown", function (e) {
+    if (
+      e.keyCode === 123 || // F12
+      (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl + Shift + C
+      (e.ctrlKey && e.keyCode === 85) || // Ctrl + U
+      (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl + Shift + I
+      (e.ctrlKey && e.keyCode === 83) // Ctrl + S
+    ) {
+      if (!isDevAccessGranted()) {
+        e.preventDefault();
+        askForPassword();
+      }
+    }
+  });
+
+  // Chặn chuột phải
+  window.addEventListener("contextmenu", function (e) {
+    if (!isDevAccessGranted()) e.preventDefault();
+  });
+
+  // Chặn gesture, zoom, kéo thả, context menu điện thoại
+  document.addEventListener("touchstart", function (e) {
+    if (!isDevAccessGranted() && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.addEventListener("gesturestart", function (e) {
+    if (!isDevAccessGranted()) e.preventDefault();
+  });
+
+  document.addEventListener("dragstart", function (e) {
+    if (!isDevAccessGranted()) e.preventDefault();
+  });
+
+  document.addEventListener("contextmenu", function (e) {
+    if (!isDevAccessGranted()) e.preventDefault();
+  });
+
+  // Chặn nếu đang chạy trên Android WebView
+  if (navigator.userAgent.toLowerCase().includes("wv")) {
+    window.location.href = "https://www.truongcongly.com";
+  }
+</script>
     
     <script type="module" src="./editor.js"></script>
       
